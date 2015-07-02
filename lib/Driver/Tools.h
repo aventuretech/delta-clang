@@ -376,6 +376,35 @@ namespace darwin {
 
 }
 
+namespace delta {
+  class LLVM_LIBRARY_VISIBILITY Assemble : public GnuTool  {
+  public:
+    Assemble(const ToolChain &TC) : GnuTool("delta::Assemble", "assembler",
+                                         TC) {}
+ 
+    bool hasIntegratedCPP() const override { return false; }
+ 
+    void ConstructJob(Compilation &C, const JobAction &JA,
+                      const InputInfo &Output,
+                      const InputInfoList &Inputs,
+                      const llvm::opt::ArgList &TCArgs,
+                      const char *LinkingOutput) const override;
+  };
+  class LLVM_LIBRARY_VISIBILITY Link : public GnuTool  {
+  public:
+    Link(const ToolChain &TC) : GnuTool("delta::Link", "linker", TC) {}
+ 
+    bool hasIntegratedCPP() const override { return false; }
+    bool isLinkJob() const override { return true; }
+ 
+    void ConstructJob(Compilation &C, const JobAction &JA,
+                      const InputInfo &Output,
+                      const InputInfoList &Inputs,
+                      const llvm::opt::ArgList &TCArgs,
+                      const char *LinkingOutput) const override;
+  };
+} // end namespace delta
+
 /// openbsd -- Directly call GNU Binutils assembler and linker
 namespace openbsd {
 class LLVM_LIBRARY_VISIBILITY Assembler : public GnuTool {

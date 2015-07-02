@@ -2007,6 +2007,9 @@ const ToolChain &Driver::getToolChain(const ArgList &Args,
     case llvm::Triple::IOS:
       TC = new toolchains::DarwinClang(*this, Target, Args);
       break;
+    case llvm::Triple::Delta:
+      TC = new toolchains::Delta(*this, Target, Args);
+      break;
     case llvm::Triple::DragonFly:
       TC = new toolchains::DragonFly(*this, Target, Args);
       break;

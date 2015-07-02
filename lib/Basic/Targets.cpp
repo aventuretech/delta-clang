@@ -244,6 +244,25 @@ public:
   }
 };
 
+template<typename Target>
+class DeltaTargetInfo : public OSTargetInfo<Target> {
+ protected:
+  void getOSDefines(const LangOptions &Opts, const llvm::Triple &Triple,
+                    MacroBuilder &Builder) const override {
+    // Define them as 1 so people can check "#elif __DELTA__" instead of "#elif defined(__DELTA__)"
+    Builder.defineMacro("DELTAOS", "1");
+    Builder.defineMacro("__DELTA__", "1");
+    Builder.defineMacro("DLIBC", "1");
+    Builder.defineMacro("YOU_HAVE_THE_BEST_OS_EVER", "1");       // Damn right.
+    Builder.defineMacro("YOU_SHOULD_BE_USING_PYTHON", "1");
+  }
+ 
+ public:
+   DeltaTargetInfo(const llvm::Triple &Triple)
+       : OSTargetInfo<Target>(Triple) {
+     this->UserLabelPrefix = "";
+   }
+};
 
 // DragonFlyBSD Target
 template<typename Target>
@@ -6902,7 +6921,6 @@ public:
 };
 } // end anonymous namespace
 
-
 //===----------------------------------------------------------------------===//
 // Driver code
 //===----------------------------------------------------------------------===//
@@ -7264,6 +7282,8 @@ static TargetInfo *AllocateTarget(const llvm::Triple &Triple) {
         return new AndroidX86_64TargetInfo(Triple);
       }
     }
+    case llvm::Triple::Delta:
+      return new DeltaTargetInfo<X86_64TargetInfo>(Triple);
     case llvm::Triple::DragonFly:
       return new DragonFlyBSDTargetInfo<X86_64TargetInfo>(Triple);
     case llvm::Triple::NetBSD:

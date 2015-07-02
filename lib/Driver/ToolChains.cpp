@@ -39,6 +39,25 @@ using namespace clang::driver::toolchains;
 using namespace clang;
 using namespace llvm::opt;
 
+// Delta toolchain. Extremely generic and not-worky right now.
+
+Delta::Delta(const Driver &D, const llvm::Triple& Triple, const ArgList &Args)
+  : Generic_ELF(D, Triple, Args) {
+   // Fill this in with your default library paths one day..
+   //getFilePaths().push_back(getDriver().Dir + "/../lib");
+   //getFilePaths().push_back("/usr/lib");
+}
+ 
+Tool *Delta::buildAssembler() const {
+  return new tools::delta::Assemble(*this);
+}
+ 
+Tool *Delta::buildLinker() const {
+  return new tools::delta::Link(*this);
+}
+
+// End Delta stuff.
+
 MachO::MachO(const Driver &D, const llvm::Triple &Triple, const ArgList &Args)
     : ToolChain(D, Triple, Args) {
   // We expect 'as', 'ld', etc. to be adjacent to our install dir.

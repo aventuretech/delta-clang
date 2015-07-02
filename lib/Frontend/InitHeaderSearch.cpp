@@ -232,6 +232,7 @@ void InitHeaderSearch::AddDefaultCIncludePaths(const llvm::Triple &triple,
     case llvm::Triple::NetBSD:
     case llvm::Triple::OpenBSD:
     case llvm::Triple::Bitrig:
+    case llvm::Triple::Delta:
     case llvm::Triple::NaCl:
       break;
     default:
@@ -271,6 +272,11 @@ void InitHeaderSearch::AddDefaultCIncludePaths(const llvm::Triple &triple,
   switch (os) {
   case llvm::Triple::Linux:
     llvm_unreachable("Include management is handled in the driver.");
+
+  // It's sad, I know.
+  case llvm::Triple::Delta:
+    // Include paths will be here one day...
+    break;
 
   case llvm::Triple::CloudABI: {
     // <sysroot>/<triple>/include

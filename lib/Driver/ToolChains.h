@@ -566,6 +566,17 @@ protected:
   Tool *buildLinker() const override;
 };
 
+// TODO: Change this to Generic_EXDF (y'know, when that's a thing)
+class LLVM_LIBRARY_VISIBILITY Delta : public Generic_ELF {
+ public:
+   Delta(const Driver &D, const llvm::Triple &Triple,
+         const llvm::opt::ArgList &Args);
+ 
+ protected:
+   Tool *buildAssembler() const override;
+   Tool *buildLinker() const override;
+};
+
 class LLVM_LIBRARY_VISIBILITY FreeBSD : public Generic_ELF {
 public:
   FreeBSD(const Driver &D, const llvm::Triple &Triple,
